@@ -8,24 +8,53 @@ combined_df = pd.read_pickle('babyNamesData.pkl')
 app = Dash(__name__)
 
 app.layout = html.Div([
-        dcc.Graph(id='graph-content'),
-        html.Div([
-            html.Label("Name"),
-            dcc.Input(value='John', type='text',id='name_str'),
-            html.Br(),
-            html.Label("Baby Sex"),
-            dcc.RadioItems(["All","M","F"], "All", id='radioButton_sex',inline=True),
-            html.Br()
-            ], style={'width': '18%', 'display': 'inline-block'}),
-        html.Div([
-            html.Label("Start Year"),
-            dcc.Slider(value=2020,min=1970,max=2022,step=1,id='start_year'),
-            html.Br(),
-
-            html.Label("End Year"),
-            dcc.Slider(value=2020,min=1970,max=2022,step=1,id='end_year')
-            ], style={'width': '80%', 'display': 'inline-block'}),
-        ])
+    html.Div([
+        html.Label("Name:", style={'font-weight': 'bold','margin-right': '10px'}),
+        dcc.Input(value='John', type='text', id='name_str'),
+        html.Br(),
+        html.Br(),
+        
+        html.Label("Baby Sex:", style={'font-weight': 'bold','margin-bottom': '10px'}),
+        html.Br(),
+        dcc.RadioItems(
+            options=[
+                {'label': 'All', 'value': 'All'},
+                {'label': 'Male', 'value': 'M'},
+                {'label': 'Female', 'value': 'F'}
+            ],
+            value='All',
+            id='radioButton_sex',
+            inline=True
+        )
+    ], style={'width': '20%', 'display': 'inline-block', 'border-right': '2px solid #ddd','margin-right': '20px','textAlign': 'center' }),
+    html.Div([
+        html.Label("Start Year", style={'font-weight': 'bold','margin-bottom': '10px'}),
+        dcc.Slider(
+            value=2020,
+            min=1910,
+            max=2022,
+            step=1,
+            marks={i: str(i) for i in range(1910, 2023, 10)},
+            tooltip={"placement": "bottom", "always_visible": True},
+            id='start_year'
+        ),
+        html.Br(),
+        html.Label("End Year", style={'font-weight': 'bold','margin-bottom': '10px'}),
+        dcc.Slider(
+            value=2020,
+            min=1910,
+            max=2022,
+            step=1,
+            marks={i: str(i) for i in range(1910, 2023, 10)},
+            tooltip={"placement": "bottom", "always_visible": True},
+            id='end_year'
+        )
+    ], style={'width': '70%', 'display': 'inline-block', 'vertical-align': 'top'}),
+    html.Br(),
+    html.Div([
+        dcc.Graph(id='graph-content', style={'width': '90vw', 'height': '90vh'})
+    ], style={'width': '100%', 'display': 'inline-block', 'vertical-align': 'top'})
+], style = {'font-family': "'Helvetica', sans-serif"})
 
 
 @callback(
@@ -77,7 +106,8 @@ def update_graph(name_in,start_in,end_in,sex_in):
                     color_continuous_scale=col
                    )
     # center the title
-    fig.update_layout(title_text=title_str, title_x=0.5) 
+    fig.update_layout(title_text=title_str,
+                      title_x=0.5) 
     return fig
 
 if __name__ == '__main__':
