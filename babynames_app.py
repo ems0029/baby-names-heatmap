@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import glob
 from dash import Dash, html, dcc, callback, Output, Input
 
 combined_df = pd.read_pickle('babyNamesData.pkl')
